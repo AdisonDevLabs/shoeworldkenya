@@ -92,7 +92,7 @@ export default function ProductDetails() {
   
   const handleWhatsAppCheckout = () => {
     if (!selectedSize) return triggerSizeError();
-    const message = `Hello Diva Steps Collection,\n\nI'd like to order:\n\n• Product: ${product.name}\n${selectedSize ? `• Size: ${selectedSize}\n` : ''}${selectedColor ? `• Color: ${selectedColor}\n` : ''}• Quantity: ${quantity}\n\nPlease confirm availability and delivery details.\n\nThank you.`;
+    const message = `Hello Shoe World Kenya,\n\nI'd like to order:\n\n• Product: ${product.name}\n${selectedSize ? `• Size: ${selectedSize}\n` : ''}${selectedColor ? `• Color: ${selectedColor}\n` : ''}• Quantity: ${quantity}\n\nPlease confirm availability and delivery details.\n\nThank you.`;
     
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${brand.whatsappNumber}?text=${encodedMessage}`, '_blank');
