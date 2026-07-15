@@ -2,7 +2,7 @@
 import { Metadata } from 'next';
 import { dummyProducts } from '@/lib/data';
 import { brand } from '@/lib/data/brand';
-import ProductDetails from './ProductDetailsClient';
+import ProductDetails from './ProductDetails';
 
 // 1. Generate dynamic metadata for WhatsApp Open Graph previews
 export async function generateMetadata({ params }): Promise<Metadata> {
@@ -44,5 +44,5 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 // 2. Render the interactive Client Component
 export default function ProductPage({ params }) {
   // Pass the params down to your client component so it can handle the UI
-  return <ProductDetailsClient params={params} />;
+  return <ProductDetails params={params} />;
 }
