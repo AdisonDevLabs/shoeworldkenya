@@ -5,7 +5,7 @@ export const brand = {
   name: "Shoe World Kenya",
   url: "https://shoeworldkenya.vercel.app",
   shortName: "Shoe World",
-  logo: "",
+  logo: "/brand-logo.jpeg",
   tagline: "Step into Confidence",
   description:
     "We are home of quality thrifted shoes and T shirts",
