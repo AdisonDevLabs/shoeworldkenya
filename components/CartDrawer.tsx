@@ -10,14 +10,17 @@ import { formatPrice } from '@/lib/data';
 import { brand, cartTrustFeatures } from '@/lib/data/brand';
 import Image from 'next/image';
 
+// Apply the same luxury curve used in your animations.ts
+const premiumEasing: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
 export function CartDrawer() {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal, cartCount } = useCart();
 
   const handleWhatsAppCheckout = () => {
-    let message = `Hello Shoe World Kenya\n\nI would like to order:\n\n`;
+    let message = `Hello ${brand.name}\n\nI would like to order:\n\n`;
     
     items.forEach(item => {
-      message += `• ${item.product.name} × ${item.quantity}\n  Size: ${item.size}${item.color ? ` | Color: ${item.color}` : ''}\n`;
+      message += `• ${item.product.name} × ${item.quantity}\n  Option: ${item.size}${item.color ? ` | Color: ${item.color}` : ''}\n\n`;
     });
 
     message += `Delivery: \n\n`;
@@ -36,20 +39,21 @@ export function CartDrawer() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: premiumEasing }}
             onClick={() => setIsCartOpen(false)}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity"
           />
 
-          {/* Drawer - Fixed Viewport constraints using inset-y-0 */}
+          {/* Drawer - Removed bouncy spring, implemented smooth premium ease */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 right-0 w-full max-w-[450px] bg-[#0A0A0A] shadow-2xl z-[60] flex flex-col pt-safe pb-safe-offset border-l border-white/10"
+            transition={{ duration: 0.6, ease: premiumEasing }}
+            className="fixed inset-y-0 right-0 w-full max-w-[450px] bg-brand-card shadow-2xl z-[60] flex flex-col pt-safe pb-safe-offset border-l border-white/10"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-white/10 bg-[#111] shrink-0">
+            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-white/10 bg-brand-dark shrink-0">
               <h2 className="font-display uppercase tracking-wide text-2xl flex items-center text-white">
                 Shopping Cart ({cartCount})
               </h2>
@@ -66,16 +70,16 @@ export function CartDrawer() {
             <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 hide-scrollbar">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
-                  <div className="w-20 h-20 bg-[#111] flex items-center justify-center text-gray-500 rounded-full mb-4">
-                    <ShoppingBag className="h-10 w-10 text-[#C6FF00]" />
+                  <div className="w-20 h-20 bg-brand-dark flex items-center justify-center text-gray-500 rounded-full mb-4">
+                    <ShoppingBag className="h-10 w-10 text-brand-primary" />
                   </div>
                   <div>
                     <h3 className="font-sans font-medium text-xl text-white mb-2">Your cart is empty</h3>
-                    <p className="text-sm text-gray-400 max-w-[250px] mx-auto">Discover our latest styles and find your next favorite pair.</p>
+                    <p className="text-sm text-gray-400 max-w-[250px] mx-auto">Discover our latest styles and find your next favorite item.</p>
                   </div>
                   <button
                     onClick={() => setIsCartOpen(false)}
-                    className="h-14 px-8 mt-6 bg-[#C6FF00] text-black font-bold hover:bg-[#A3D900] rounded-md transition-colors uppercase tracking-widest text-sm w-full sm:w-auto"
+                    className="h-14 px-8 mt-6 bg-brand-primary text-black font-bold hover:bg-brand-hover rounded-md transition-colors uppercase tracking-widest text-sm w-full sm:w-auto"
                   >
                     CONTINUE SHOPPING
                   </button>
@@ -87,7 +91,7 @@ export function CartDrawer() {
                 <div className="space-y-6">
                   {items.map((item) => (
                     <div key={`${item.product.id}-${item.size}-${item.color}`} className="flex space-x-4 bg-transparent border-b border-white/5 pb-6">
-                      <div className="relative h-28 w-24 flex-shrink-0 bg-[#111] rounded-md overflow-hidden">
+                      <div className="relative h-28 w-24 flex-shrink-0 bg-brand-dark rounded-md overflow-hidden">
                         <Image
                           src={item.product.image}
                           alt={item.product.name}
@@ -110,11 +114,11 @@ export function CartDrawer() {
                           </button>
                         </div>
                         <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">
-                          Size: {item.size} {item.color ? `| ${item.color}` : ''}
+                          Option: {item.size} {item.color ? `| ${item.color}` : ''}
                         </p>
                         
                         <div className="mt-auto flex items-end justify-between pt-4">
-                          <div className="flex items-center border border-white/20 bg-[#111] overflow-hidden rounded-md">
+                          <div className="flex items-center border border-white/20 bg-brand-dark overflow-hidden rounded-md">
                             <button
                               onClick={() => updateQuantity(item.product.id, item.size, item.color, item.quantity - 1)}
                               className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
@@ -141,7 +145,7 @@ export function CartDrawer() {
                     <div className="grid grid-cols-1 gap-2 text-[11px] text-gray-400 font-light">
                       {cartTrustFeatures.map((feature, idx) => (
                         <div key={idx} className="flex items-center">
-                          <feature.icon className="h-3.5 w-3.5 mr-2 text-[#C6FF00]" /> {feature.text}
+                          <feature.icon className="h-3.5 w-3.5 mr-2 text-brand-primary" /> {feature.text}
                         </div>
                       ))}
                     </div>
@@ -152,7 +156,7 @@ export function CartDrawer() {
 
             {/* Footer / Summary */}
             {items.length > 0 && (
-              <div className="border-t border-white/10 bg-[#111] shrink-0">
+              <div className="border-t border-white/10 bg-brand-dark shrink-0">
                 <div className="p-5 sm:p-6 space-y-4">
                   {/* Cart Summary */}
                   <div className="space-y-1 mb-6">
@@ -168,7 +172,7 @@ export function CartDrawer() {
                   {/* Checkout Button */}
                   <button
                     onClick={handleWhatsAppCheckout}
-                    className="w-full h-16 bg-[#C6FF00] text-black font-bold flex items-center justify-center hover:bg-[#A3D900] transition-all group uppercase tracking-widest text-base shadow-[0_0_20px_-5px_rgba(198,255,0,0.4)] rounded-md"
+                    className="w-full h-16 bg-brand-primary text-black font-bold flex items-center justify-center hover:bg-brand-hover transition-all group uppercase tracking-widest text-base shadow-[0_0_20px_-5px_rgba(0,0,0,0.3)] rounded-md"
                   >
                     <MessageCircle className="w-6 h-6 mr-3" />
                     <span>ORDER ON WHATSAPP</span>

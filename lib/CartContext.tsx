@@ -29,20 +29,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Load cart from local storage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('divasteps_cart');
-    if (savedCart) {
-      try {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+    try {
+      // Now the actual fetch is protected
+      const savedCart = window.localStorage.getItem('divasteps_cart');
+      if (savedCart) {
         setItems(JSON.parse(savedCart));
-      } catch (e) {
-        console.error('Failed to parse cart', e);
       }
+    } catch (e) {
+      console.warn('Local storage access denied by browser (likely an in-app browser).', e);
+      // The app will continue to run normally, the cart will just start empty.
     }
   }, []);
 
   // Save cart to local storage when it changes
   useEffect(() => {
-    localStorage.setItem('divasteps_cart', JSON.stringify(items));
+    try {
+      // Protect the save action as well
+      window.localStorage.setItem('divasteps_cart', JSON.stringify(items));
+    } catch (e) {
+      console.warn('Failed to save cart. Local storage might be restricted.', e);
+    }
   }, [items]);
 
   const addToCart = (product: Product, size: string, color?: string, quantity = 1) => {

@@ -29,6 +29,28 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: brand.seo.title,
   description: brand.seo.description,
+
+  openGraph: {
+    title: brand.seo.title,
+    description: brand.seo.description,
+    url: brand.url,
+    siteName: brand.name, 
+    images: [
+      {
+        url: brand.seo.ogImage, 
+        width: 1200,
+        height: 630,
+        alt: `${brand.name} preview image`,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  icons: {
+    icon: brand.seo.favicon,
+    apple: brand.seo.appleIcon,
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

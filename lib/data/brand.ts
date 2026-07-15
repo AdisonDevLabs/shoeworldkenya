@@ -3,13 +3,73 @@ import { Truck, MessageCircle, Star, Sparkles, Tag, CheckCircle, ShieldCheck } f
 
 export const brand = {
   name: "Shoe World Kenya",
+  url: "https://shoeworldkenya.vercel.app",
+  shortName: "Shoe World",
+  logo: "",
   tagline: "Step into Confidence",
   description:
     "We are home of quality thrifted shoes and T shirts",
-    seo: {
-    title: "Shoe World Kenya",
+  location: "Nakuru, Kenya",
+  seo: {
+    title: "Shoe World Kenya | Home of quality thrifted Shoes and T shirts",
     description: "Premium quality thrifted shoes and T shirts",
+    ogImage: "/og-preview.png",
+    favicon: "/favicon.ico",
+    appleIcon: "/apple-touch-icon.png",
   },
+
+  hero: {
+    badge: "Premium Shoes and Tees in Kenya",
+    headlineTop: "STEP INTO",
+    headlineHighlight: "CONFIDENCE",
+    backgroundImage: "/pexels-wedding-maps-130174465-10114295.jpg",
+    ctaPrimary: "Order on WhatsApp",
+    ctaSecondary: "Shop Collection",
+  },
+
+  sections: {
+    featured: {
+      title: "Featured Collection",
+      subtitle: "Find your perfect look. Browse our curated selection of quality shoes and tees."
+    },
+    flashDeals: {
+      badge: "Live Offers",
+      title: "Flash Deals",
+      subtitle: "Grab your favorite styles before they are gone",
+      cta: "View All Deals"
+    },
+    newArrivals: {
+      badge: "Updated Weekly",
+      title: "Latest Styles",
+      subtitle: "Fresh styles added weekly — be the first to own them.",
+      cta: "View All Arrivals",
+      trendingBadgePrefix: "Trending in"
+    },
+    bestSellers: {
+      badge: "Customer Favorites",
+      title: "BEST SELLERS",
+      subtitle: "Trusted and loved by hundreds of happy customers across Kenya.",
+      cta: "View All Favorites"
+    },
+    whyUs: {
+      badge: "Trust & Reliability",
+      titleTop: "WHY SHOP WITH",
+      subtitle: "We focus on quality, affordability, and fast service to make your shopping experience effortless."
+    },
+    reviews: {
+      badge: "Real Customer Feedback",
+      titleTop: "WHAT OUR",
+      titleBottom: "CUSTOMERS SAY"
+    },
+    whatsappCta: {
+      badge: "We Are Online",
+      titleTop: "START YOUR",
+      titleBottom: "ORDER NOW",
+      subtitle: "Chat with us directly on WhatsApp to confirm size, price, and delivery details."
+    }
+  },
+
+
   whatsappNumber: "254754431222",
   whatsappMessage: {
     general:
