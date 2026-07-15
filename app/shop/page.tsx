@@ -61,7 +61,7 @@ function ShopContent() {
     }
   }, [rawCategory]);
 
-  // Reset pagination when any filter changes
+  // Reset pagination when wa.me any filter changes
   useEffect(() => {
     setVisibleCount(8);
   }, [filterCategory, filterPrice, filterSize, searchQuery, sortOption, discoveryMode]);
@@ -573,7 +573,7 @@ function ShopContent() {
                           <div className="mt-auto pt-2 w-full">
                              <a 
                               href={`https://wa.me/${brand.whatsappNumber}?text=${encodeURIComponent(
-                                `👋 Hello ${brand.name},\n\nI was browsing your store and I'm interested in ordering this item:\n\n🛍️ *Item:* ${product.name}\n💰 *Price:* Ksh ${product.price}\n\n`
+                                `👋 Hello ${brand.name},\n\nI was browsing your store and I'm interested in ordering this item:\n\n🛍️ *Item:* ${product.name}\n💰 *Price:* Ksh ${product.price}\n\n${brand.url}/product/${product.id}`
                               )}`}
                               target="_blank" rel="noreferrer"
                               className="w-full bg-brand-primary text-black font-bold h-10 rounded-md hover:bg-brand-hover transition-colors flex justify-center items-center uppercase tracking-widest text-[10px] sm:text-xs z-20 relative"

@@ -100,7 +100,7 @@ export default function ProductDetails() {
              colorLower.split(' ').some(term => term.length > 1 && imgName.includes(term));
     });
     
-    // 2. Fallback to index mapping if array lengths correspond
+    // 2. Fallback to index mapping if array lengths correspond wa.me
     if (matchedIdx === -1 && product.colors) {
       const cIdx = product.colors.indexOf(color);
       if (cIdx >= 0 && cIdx < images.length) {

@@ -91,7 +91,7 @@ export default function Home() {
               {brand.description}
             </motion.p>
             
-            {/* 4. Micro Trust Row */}
+            {/* 4. Micro Trust Row wa.me */}
             <motion.div 
               variants={staggerItem}
               className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 mb-12"
@@ -298,7 +298,7 @@ export default function Home() {
                        <a 
                         href={`https://wa.me/${brand.whatsappNumber}?text=${encodeURIComponent(
                           `👋 Hello ${brand.name},\n\nI would like to grab this flash deal:\n\n📦 *Item:* ${product.name}\n💰 *Price:* Ksh ${product.price}\n\nPlease let me know the next steps for delivery`
-                        )}`}
+                        )}\n\n${brand.url}/product/${product.id}`}
                         target="_blank" rel="noreferrer"
                         className="w-full bg-brand-primary text-black rounded-md font-bold py-2.5 hover:bg-brand-hover transition-colors flex justify-center items-center uppercase tracking-widest text-xs"
                        >
@@ -379,7 +379,7 @@ export default function Home() {
                      <a 
                       href={`https://wa.me/${brand.whatsappNumber}?text=${encodeURIComponent(
                         `👋 Hello ${brand.name} team,\n\nI just saw your new arrival and I would love to get my hands on it!\n\n✨ *Item:* ${product.name}\n💰 *Price:* Ksh ${product.price}\n\nIs this currently in stock, and what are the delivery options?`
-                      )}`}
+                      )}\n\n${brand.url}/product/${product.id}`}
                       target="_blank" rel="noreferrer"
                       className="w-full bg-brand-primary text-black font-bold py-2 rounded-md transition-colors flex justify-center items-center uppercase tracking-widest text-[9px] sm:text-xs hover:bg-brand-hover"
                      >
@@ -471,7 +471,7 @@ export default function Home() {
                      <a 
                       href={`https://wa.me/${brand.whatsappNumber}?text=${encodeURIComponent(
                         `👋 Hello ${brand.name}!\n\nI saw this is one of your best sellers and I'd love to order one before it sells out:\n\n🌟 *Item:* ${product.name}\n💰 *Price:* Ksh ${product.price}\n\nPlease let me know if you still have stock and the next steps for delivery`
-                      )}`}
+                      )}\n\n${brand.url}/product/${product.id}`}
                       target="_blank" rel="noreferrer"
                       className="w-full bg-brand-primary text-black font-bold py-2 rounded-md transition-colors flex justify-center items-center uppercase tracking-widest text-[9px] sm:text-xs hover:bg-brand-hover"
                      >

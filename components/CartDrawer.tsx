@@ -16,6 +16,8 @@ const premiumEasing: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function CartDrawer() {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal, cartCount } = useCart();
 
+  const productUrl = window.location.href;
+
   const handleWhatsAppCheckout = () => {
     let message = `Hello ${brand.name}\n\nI would like to order:\n\n`;
     
@@ -24,7 +26,7 @@ export function CartDrawer() {
     });
 
     message += `Delivery: \n\n`;
-    message += `\nSubtotal: ${formatPrice(cartTotal)}\n\nPlease confirm availability, total payable and payment method\n\nThank you.`;
+    message += `\nSubtotal: ${formatPrice(cartTotal)}\n\nPlease confirm availability, total payable and payment method\n\nThank you.\n\n${productUrl}`;
     
     const encodedMessage = encodeURIComponent(message);
     window.open(`https://wa.me/${brand.whatsappNumber}?text=${encodedMessage}`, '_blank');
