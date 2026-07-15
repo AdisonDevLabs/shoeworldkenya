@@ -4,8 +4,12 @@ import { dummyProducts } from '@/lib/data';
 import { brand } from '@/lib/data/brand';
 import ProductDetailsClient from './ProductDetailsClient';
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { id } = params;
+type Props = {
+  params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
   
   // Find the product to generate specific metadata
   const product = dummyProducts.find(p => p.id === id);
