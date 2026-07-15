@@ -16,9 +16,11 @@ const premiumEasing: [number, number, number, number] = [0.16, 1, 0.3, 1];
 export function CartDrawer() {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal, cartCount } = useCart();
 
-  const productUrl = window.location.href;
 
   const handleWhatsAppCheckout = () => {
+
+    const productUrl = window.location.href;
+
     let message = `Hello ${brand.name}\n\nI would like to order:\n\n`;
     
     items.forEach(item => {
