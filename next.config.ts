@@ -15,8 +15,16 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'picsum.photos',
         port: '',
-        pathname: '/**', // This allows any path under the hostname
+        pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pub-22a2ca70d18d4e32a7cf45d56477c7f9.r2.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'shoeworldkenya.storxia.tech',
+      }
     ],
   },
   output: 'standalone',
