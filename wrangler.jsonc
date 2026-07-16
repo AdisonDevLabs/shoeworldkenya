@@ -24,11 +24,13 @@
 		// See https://opennext.js.org/cloudflare/caching
 		{
 			"binding": "NEXT_INC_CACHE_R2_BUCKET",
-			// Create the bucket before deploying
-			// You can change the bucket name if you want
-			// See https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create
 			"bucket_name": "shoeworldkenya-opennext-cache"
+		},
+		{
+			"binding": "PRODUCT_IMAGES",
+			"bucket_name": "shoeworld-images"
 		}
+		
 	],
 	"images": {
 		// Enable image optimization

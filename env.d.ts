@@ -4,6 +4,7 @@
 declare global {
   interface CloudflareEnv {
     shoeworld_db: D1Database;
+    PRODUCT_IMAGES: R2Bucket;
   }
 }
 
