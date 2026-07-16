@@ -3,7 +3,7 @@
 
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { getDb } from '@/lib/db';
-import { products } from '@/lib/db/schema';
+import { products, categories } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
@@ -107,6 +107,26 @@ export async function deleteProduct(id: string) {
     revalidatePath('/admin');
     
     return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message };
+  }
+}
+
+export async function createQuickCategory(name: string) {
+  try {
+    const db = await getDb();
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    
+    await db.insert(categories).values({
+      slug,
+      name,
+      label: 'New Category',
+      image: '/pexels-wedding-maps-130174465-10114295.jpg', // Safe fallback image from your existing assets
+      span: 'md:col-span-2'
+    });
+    
+    revalidatePath('/admin');
+    return { success: true, category: { name, slug } };
   } catch (error: any) {
     return { success: false, error: error.message };
   }

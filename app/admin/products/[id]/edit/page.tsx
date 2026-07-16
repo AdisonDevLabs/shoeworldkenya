@@ -1,6 +1,6 @@
 // app/admin/products/[id]/edit/page.tsx
 import { getDb } from '@/lib/db';
-import { products } from '@/lib/db/schema';
+import { products, categories } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import EditFormClient from './EditFormClient';
 
@@ -14,8 +14,18 @@ export default async function EditProductPage({ params }: Props) {
   
   const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
   const product = result[0];
+  
+  // 1. Fetch the categories from the database
+  const allCategories = await db.select().from(categories);
 
-  if (!product) return <div className="p-24 text-white text-center">Product not found</div>;
+  if (!product) {
+    return (
+      <div className="h-full flex items-center justify-center text-white">
+        <p className="text-gray-400 font-display text-xl uppercase tracking-widest">Product not found</p>
+      </div>
+    );
+  }
 
-  return <EditFormClient product={product} />;
+  // 2. Pass both props into the client form
+  return <EditFormClient product={product} initialCategories={allCategories} />;
 }
