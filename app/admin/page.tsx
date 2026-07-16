@@ -3,7 +3,7 @@ import { getDb } from '@/lib/db';
 import { products } from '@/lib/db/schema';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import DeleteButton from './DeleteButton';
 
 export const dynamic = 'force-dynamic';
@@ -13,43 +13,50 @@ export default async function AdminDashboard() {
   const allProducts = await db.select().from(products);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-brand-dark min-h-screen text-white pt-24">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="font-display text-4xl uppercase tracking-wide">Products Dashboard</h1>
+    <div className="h-full w-full max-w-7xl mx-auto p-4 sm:p-6 flex flex-col overflow-hidden">
+      {/* Dashboard Top Row Actions - Fixed height header section */}
+      <div className="flex justify-between items-center mb-6 shrink-0">
+        <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wide">Products Dashboard</h1>
         <Link 
           href="/admin/products/new" 
-          className="bg-brand-primary text-black px-4 py-2 rounded-md font-bold uppercase tracking-widest text-sm flex items-center hover:bg-brand-hover"
+          className="bg-brand-primary text-black px-4 py-2 rounded-md font-bold uppercase tracking-widest text-xs sm:text-sm flex items-center hover:bg-brand-hover transition-colors shrink-0"
         >
-          <Plus className="w-4 h-4 mr-2" /> Add Product
+          <Plus className="w-4 h-4 mr-1.5 sm:mr-2" /> Add Product
         </Link>
       </div>
 
-      <div className="bg-brand-card border border-white/5 rounded-md overflow-hidden">
-        <table className="w-full text-left text-sm whitespace-nowrap">
-          <thead className="bg-white/5 border-b border-white/10">
+      {/* Table Container Wrapper - Purely self-scrollable container section */}
+      <div className="flex-1 min-h-0 bg-brand-card border border-white/5 rounded-md overflow-auto shadow-inner scrollbar-hide">
+        <table className="w-full text-left text-xs sm:text-sm whitespace-nowrap table-auto">
+          <thead className="bg-white/5 border-b border-white/10 sticky top-0 z-10 backdrop-blur-sm">
             <tr>
-              <th className="px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Image</th>
-              <th className="px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Name</th>
-              <th className="px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Price</th>
-              <th className="px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Category</th>
-              <th className="px-6 py-4 font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+              <th className="px-4 sm:px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Image</th>
+              <th className="px-4 sm:px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Name</th>
+              <th className="px-4 sm:px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Price</th>
+              <th className="px-4 sm:px-6 py-4 font-bold uppercase tracking-widest text-gray-400">Category</th>
+              <th className="px-4 sm:px-6 py-4 font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/5">
             {allProducts.map((p) => (
               <tr key={p.id} className="hover:bg-white/5 transition-colors">
-                <td className="px-6 py-3">
-                  <div className="relative w-12 h-12 bg-black rounded-md overflow-hidden">
-                    <Image src={p.image.startsWith('http') ? p.image : `https://shoeworldkenya.storxia.tech${p.image}`} alt={p.name} fill className="object-cover" />
+                <td className="px-4 sm:px-6 py-2.5">
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 bg-black rounded-md overflow-hidden shrink-0">
+                    <Image 
+                      src={p.image.startsWith('http') ? p.image : `https://shoeworldkenya.storxia.tech${p.image}`} 
+                      alt={p.name} 
+                      fill 
+                      className="object-cover" 
+                    />
                   </div>
                 </td>
-                <td className="px-6 py-3 font-medium">{p.name}</td>
-                <td className="px-6 py-3 text-brand-primary">Ksh {p.price}</td>
-                <td className="px-6 py-3 text-gray-400">{p.category}</td>
-                <td className="px-6 py-3 text-right">
-                  <div className="flex justify-end gap-3">
-                    <Link href={`/admin/products/${p.id}/edit`} className="text-blue-400 hover:text-blue-300 p-2 bg-blue-500/10 rounded-md">
-                      <Edit className="w-4 h-4" />
+                <td className="px-4 sm:px-6 py-2.5 font-medium truncate max-w-[180px] sm:max-w-xs">{p.name}</td>
+                <td className="px-4 sm:px-6 py-2.5 text-brand-primary font-mono font-semibold">Ksh {p.price}</td>
+                <td className="px-4 sm:px-6 py-2.5 text-gray-400">{p.category}</td>
+                <td className="px-4 sm:px-6 py-2.5 text-right">
+                  <div className="flex justify-end gap-2 sm:gap-3">
+                    <Link href={`/admin/products/${p.id}/edit`} className="text-blue-400 hover:text-blue-300 p-1.5 sm:p-2 bg-blue-500/10 rounded-md transition-colors" aria-label="Edit">
+                      <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </Link>
                     <DeleteButton id={p.id} />
                   </div>
