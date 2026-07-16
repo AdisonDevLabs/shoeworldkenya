@@ -3,7 +3,7 @@ import { Truck, MessageCircle, Star, Sparkles, Tag, CheckCircle, ShieldCheck } f
 
 export const brand = {
   name: "Shoe World Kenya",
-  url: "https://shoeworldkenya.vercel.app",
+  url: "https://shoeworldkenya.storxia.tech",
   shortName: "Shoe World",
   logo: "/brand-logo.jpeg",
   tagline: "Step into Confidence",

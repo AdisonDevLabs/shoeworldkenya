@@ -28,6 +28,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? product.images[0] 
     : product.image;
 
+  const absoluteImageUrl = previewImage.startsWith('http') 
+    ? previewImage 
+    : `${brand.url}${previewImage}`;
+
   return {
     title: `${product.name} | ${brand.name}`,
     description: product.description,
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: brand.name,
       images: [
         {
-          url: previewImage,
+          url: absoluteImageUrl,
           width: 800,
           height: 800,
           alt: `${product.name} preview image`,

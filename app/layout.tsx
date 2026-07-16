@@ -27,6 +27,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(brand.url),
+  
   title: brand.seo.title,
   description: brand.seo.description,
 
