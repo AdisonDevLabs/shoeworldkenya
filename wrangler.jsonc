@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": ".open-next/worker.js",
-	"name": "ai-studio-applet",
+	"name": "shoeworldkenya",
 	"compatibility_date": "2026-07-16",
 	"compatibility_flags": [
 		"nodejs_compat",
@@ -16,7 +16,7 @@
 			// Self-reference service binding, the service name must match the worker name
 			// see https://opennext.js.org/cloudflare/caching
 			"binding": "WORKER_SELF_REFERENCE",
-			"service": "ai-studio-applet"
+			"service": "shoeworldkenya"
 		}
 	],
 	"r2_buckets": [
@@ -27,12 +27,20 @@
 			// Create the bucket before deploying
 			// You can change the bucket name if you want
 			// See https://developers.cloudflare.com/workers/wrangler/commands/#r2-bucket-create
-			"bucket_name": "ai-studio-applet-opennext-cache"
+			"bucket_name": "shoeworldkenya-opennext-cache"
 		}
 	],
 	"images": {
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "shoeworld_db",
+			"database_name": "shoeworld-db",
+			"database_id": "04f0868f-4cd3-4b0c-a3d4-27b72ee0fff3",
+			"remote": true
+		}
+	]
 }
