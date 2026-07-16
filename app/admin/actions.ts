@@ -131,3 +131,33 @@ export async function createQuickCategory(name: string) {
     return { success: false, error: error.message };
   }
 }
+
+// Add these to app/admin/actions.ts
+export async function createCategory(formData: FormData) {
+  try {
+    const { env } = await getCloudflareContext({ async: true });
+    const db = await getDb();
+    
+    const imageFile = formData.get('image') as File;
+    const name = formData.get('name') as string;
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    
+    let imageUrl = '/placeholder.jpg';
+    if (imageFile && imageFile.size > 0) {
+      const key = `categories/${slug}-${Date.now()}`;
+      await env.PRODUCT_IMAGES.put(key, await imageFile.arrayBuffer(), { httpMetadata: { contentType: imageFile.type } });
+      imageUrl = `https://pub-22a2ca70d18d4e32a7cf45d56477c7f9.r2.dev/${key}`;
+    }
+
+    await db.insert(categories).values({ slug, name, image: imageUrl, label: 'New Collection' });
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (e: any) { return { success: false, error: e.message }; }
+}
+
+export async function deleteCategory(slug: string) {
+  const db = await getDb();
+  await db.delete(categories).where(eq(categories.slug, slug));
+  revalidatePath('/admin');
+  return { success: true };
+}

@@ -1,28 +1,35 @@
 // app/admin/page.tsx
 import { getDb } from '@/lib/db';
-import { products } from '@/lib/db/schema';
+import { products, categories } from '@/lib/db/schema';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Edit } from 'lucide-react';
 import DeleteButton from './DeleteButton';
+import CategoryManager from './CategoryManager';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
   const db = await getDb();
   const allProducts = await db.select().from(products);
+  const allCategories = await db.select().from(categories);
 
   return (
     <div className="h-full w-full max-w-7xl mx-auto p-4 sm:p-6 flex flex-col overflow-hidden">
       {/* Dashboard Top Row Actions - Fixed height header section */}
       <div className="flex justify-between items-center mb-6 shrink-0">
         <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wide">Products Dashboard</h1>
-        <Link 
-          href="/admin/products/new" 
-          className="bg-brand-primary text-black px-4 py-2 rounded-md font-bold uppercase tracking-widest text-xs sm:text-sm flex items-center hover:bg-brand-hover transition-colors shrink-0"
-        >
-          <Plus className="w-4 h-4 mr-1.5 sm:mr-2" /> Add Product
-        </Link>
+        <div className="flex gap-3">
+          <CategoryManager categories={allCategories} />
+
+          <Link 
+            href="/admin/products/new" 
+            className="bg-brand-primary text-black px-4 py-2 rounded-md font-bold uppercase tracking-widest text-xs sm:text-sm flex items-center hover:bg-brand-hover transition-colors shrink-0"
+          >
+            <Plus className="w-4 h-4 mr-1.5 sm:mr-2" /> Add Product
+          </Link>
+        </div>
+        
       </div>
 
       {/* Table Container Wrapper - Purely self-scrollable container section */}
