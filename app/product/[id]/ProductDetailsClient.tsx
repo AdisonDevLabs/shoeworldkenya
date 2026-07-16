@@ -1,13 +1,14 @@
-// app/product/[id]/page.tsx
+// app/product/[id]/ProductDetailsClient.tsx
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight, Star, Minus, Plus, ShoppingBag, MessageCircle, Heart, ArrowLeft, ShieldCheck, Truck, X, HelpCircle, CheckCircle, ChevronLeft, SearchX, Quote } from 'lucide-react';
-import { dummyProducts, formatPrice } from '@/lib/data';
+// dummyProducts is removed, but we keep formatPrice
+import { formatPrice } from '@/lib/data';
 import { productReviews } from '@/lib/data/testimonials';
 import { brand } from '@/lib/data/brand';
 import { colorMap, sizeGuideData } from '@/lib/data/products';
@@ -15,26 +16,8 @@ import { useCart } from '@/lib/CartContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { fadeUp, staggerContainer, staggerItem } from '@/lib/animations';
 
-export default function ProductDetails() {
-  const params = useParams();
+export default function ProductDetailsClient({ product, relatedProducts, recentlyViewed }: any) {
   const router = useRouter();
-  const { id } = params;
-  
-  const product = dummyProducts.find(p => p.id === id);
-  
-  const relatedProducts = useMemo(() => {
-    return dummyProducts
-      .filter(p => p.category === product?.category && p.id !== product?.id)
-      .slice(0, 4);
-  }, [product?.category, product?.id]);
-
-  const recentlyViewed = useMemo(() => {
-    return dummyProducts
-      .filter(p => p.id !== product?.id)
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 4);
-  }, [product?.id]);
-  
   const { addToCart, setIsCartOpen } = useCart();
   
   const [selectedSize, setSelectedSize] = useState<string>(product?.sizes?.[0] || '');
@@ -53,7 +36,7 @@ export default function ProductDetails() {
        setSelectedSize(product.sizes?.[0] || '');
        setSelectedColor(product.colors?.[0] || '');
     }
-  }, [id, product]);
+  }, [product?.id, product]);
 
   // Handle Sticky Mobile CTA Visibility
   useEffect(() => {
@@ -94,13 +77,13 @@ export default function ProductDetails() {
     const colorLower = color.toLowerCase();
     
     // 1. Direct match by parsing color string to find image match
-    let matchedIdx = images.findIndex(img => {
+    let matchedIdx = images.findIndex((img: string) => {
       const imgName = img.toLowerCase();
       return imgName.includes(colorLower) || 
-             colorLower.split(' ').some(term => term.length > 1 && imgName.includes(term));
+             colorLower.split(' ').some((term: string) => term.length > 1 && imgName.includes(term));
     });
     
-    // 2. Fallback to index mapping if array lengths correspond wa.me
+    // 2. Fallback to index mapping if array lengths correspond
     if (matchedIdx === -1 && product.colors) {
       const cIdx = product.colors.indexOf(color);
       if (cIdx >= 0 && cIdx < images.length) {
@@ -120,10 +103,10 @@ export default function ProductDetails() {
     const imgName = images[idx].toLowerCase();
     
     // Reverse mapping image to color state
-    let matchedColor = product.colors.find(c => {
+    let matchedColor = product.colors.find((c: string) => {
        const cLower = c.toLowerCase();
        return imgName.includes(cLower) ||
-              cLower.split(' ').some(term => term.length > 1 && imgName.includes(term));
+              cLower.split(' ').some((term: string) => term.length > 1 && imgName.includes(term));
     });
     
     if (!matchedColor && idx < product.colors.length) {
@@ -258,7 +241,7 @@ export default function ProductDetails() {
                 
                 {/* Mobile Swipe Indicators */}
                 <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 md:hidden z-20">
-                  {images.map((_, idx) => (
+                  {images.map((_: any, idx: number) => (
                     <button 
                       key={idx} 
                       onClick={() => handleImageSelect(idx)}
@@ -270,7 +253,7 @@ export default function ProductDetails() {
               
               {/* Desktop Thumbnails */}
               <div className="hidden md:flex gap-4 mt-4 overflow-x-auto hide-scrollbar pb-2">
-                {images.map((img, idx) => (
+                {images.map((img: string, idx: number) => (
                   <button 
                     key={idx} 
                     onClick={() => handleImageSelect(idx)}
@@ -331,7 +314,7 @@ export default function ProductDetails() {
                   <div>
                     <span className="font-bold text-white uppercase tracking-widest text-xs block mb-4">Color: <span className="font-medium text-brand-primary ml-1">{selectedColor || 'Select'}</span></span>
                     <div className="flex flex-wrap gap-4">
-                      {product.colors.map((color) => {
+                      {product.colors.map((color: string) => {
                         const hexColor = colorMap[color] || '#333';
                         return (
                           <button
@@ -369,7 +352,7 @@ export default function ProductDetails() {
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      {product.sizes.map((size) => (
+                      {product.sizes.map((size: string) => (
                         <button
                           key={size}
                           onClick={() => { setSelectedSize(size); setSizeError(false); }}
@@ -553,7 +536,7 @@ export default function ProductDetails() {
                 Complete The Look
               </motion.h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                {relatedProducts.map(prod => (
+                {relatedProducts.map((prod: any) => (
                   <motion.div 
                     initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={fadeUp}
                     key={prod.id}
@@ -589,10 +572,10 @@ export default function ProductDetails() {
               initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={fadeUp}
               className="text-xs uppercase font-bold tracking-[0.2em] text-gray-500 mb-8 border-b border-white/10 pb-4"
             >
-              Recently Viewed
+              More To Discover
             </motion.h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                {recentlyViewed.map(prod => (
+                {recentlyViewed.map((prod: any) => (
                   <motion.div 
                     initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.1 }} variants={fadeUp}
                     key={prod.id}
