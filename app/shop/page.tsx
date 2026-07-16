@@ -4,7 +4,7 @@ import { getDb } from '@/lib/db';
 import { products } from '@/lib/db/schema';
 import ShopClient from './ShopClient';
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export default async function ShopPage() {
   // Wait for the OpenNext / Cloudflare bindings to initialize

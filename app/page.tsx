@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import HomeClient from './HomeClient';
 
 // 1. Tell Next.js to use Cloudflare's Edge network
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   // 2. Await the database initialization

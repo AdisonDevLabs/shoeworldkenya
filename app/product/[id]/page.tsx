@@ -6,7 +6,7 @@ import { getDb } from '@/lib/db';
 import { products } from '@/lib/db/schema';
 import { eq, and, not, sql } from 'drizzle-orm';
 
-export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
 type Props = {
   params: Promise<{ id: string }>;
