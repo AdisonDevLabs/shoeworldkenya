@@ -17,9 +17,12 @@ export default async function AdminDashboard() {
   return (
     <div className="h-full w-full max-w-7xl mx-auto p-4 sm:p-6 flex flex-col overflow-hidden">
       {/* Dashboard Top Row Actions - Fixed height header section */}
-      <div className="flex justify-between items-center mb-6 shrink-0">
-        <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wide">Products Dashboard</h1>
-        <div className="flex gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 shrink-0">
+        <h1 className="font-display text-2xl sm:text-4xl uppercase tracking-wide truncate">
+          Products Dashboard
+        </h1>
+        
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
           <CategoryManager categories={allCategories} />
 
           <Link 
@@ -29,7 +32,6 @@ export default async function AdminDashboard() {
             <Plus className="w-4 h-4 mr-1.5 sm:mr-2" /> Add Product
           </Link>
         </div>
-        
       </div>
 
       {/* Table Container Wrapper - Purely self-scrollable container section */}
