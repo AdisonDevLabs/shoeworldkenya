@@ -4,6 +4,16 @@ import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 // ==========================================
 // 1. PRODUCTS
 // ==========================================
+
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  resetToken: text('reset_token'),
+  resetTokenExpiry: integer('reset_token_expiry') // Stored as Unix timestamp
+});
+
+
 export const products = sqliteTable('products', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),

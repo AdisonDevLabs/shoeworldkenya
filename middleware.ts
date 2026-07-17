@@ -3,16 +3,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // 1. Check if the user is trying to access /admin
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  const path = request.nextUrl.pathname;
+  
+  // Protect all /admin routes EXCEPT the auth pages
+  const isAuthPage = path.startsWith('/admin/login') || path.startsWith('/admin/forgot-password') || path.startsWith('/admin/reset-password');
+  
+  if (path.startsWith('/admin') && !isAuthPage) {
+    const session = request.cookies.get('admin_session');
     
-    // 2. Get the authentication token from cookies
-    const authCookie = request.cookies.get('admin_token');
-
-    // 3. Compare with a secret stored in your Environment Variables
-    // You must set ADMIN_SECRET in your Cloudflare Pages / Vercel dashboard
-    if (!authCookie || authCookie.value !== process.env.ADMIN_SECRET) {
-      // Redirect to a login page (you must create /admin/login)
+    // If no session cookie exists, redirect to login
+    if (!session) {
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }
@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 4. Matcher tells Next.js which paths to run this on
+// Ensure middleware only runs on admin paths to save compute resources
 export const config = {
   matcher: ['/admin/:path*'],
 };
