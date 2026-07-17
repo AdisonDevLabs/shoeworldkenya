@@ -115,7 +115,7 @@ export async function updateProduct(id: string, formData: FormData) {
       
       // Overwrite the old gallery. Main Image is ALWAYS index 0
       finalImagesArray = [finalMainImageUrl, ...galleryUrls];
-    }git
+    }
 
     const updatedData = {
       name: formData.get('name') as string,
@@ -230,4 +230,47 @@ export async function deleteCategory(slug: string) {
   await db.delete(categories).where(eq(categories.slug, slug));
   revalidatePath('/admin');
   return { success: true };
+}
+
+export async function updateCategory(slug: string, formData: FormData) {
+  try {
+    const { env } = await getCloudflareContext({ async: true });
+    const db = await getDb();
+    
+    const name = formData.get('name') as string;
+    const label = formData.get('label') as string;
+    const span = formData.get('span') as string || 'md:col-span-2';
+    
+    // Fetch existing category to keep old image if a new one isn't provided
+    const existing = await db.select().from(categories).where(eq(categories.slug, slug)).limit(1);
+    if (!existing[0]) throw new Error('Category not found');
+
+    let imageUrl = existing[0].image;
+    const imageFile = formData.get('image') as File;
+    
+    // Only upload to R2 if a new image was selected
+    if (imageFile && imageFile.size > 0) {
+      const key = `categories/${slug}-${Date.now()}`;
+      await env.PRODUCT_IMAGES.put(key, await imageFile.arrayBuffer(), { 
+          httpMetadata: { contentType: imageFile.type } 
+      });
+      imageUrl = `https://pub-22a2ca70d18d4e32a7cf45d56477c7f9.r2.dev/${key}`;
+    }
+
+    // Update the row. We do not change the slug so product associations don't break.
+    await db.update(categories).set({ 
+        name, 
+        label, 
+        span, 
+        image: imageUrl 
+    }).where(eq(categories.slug, slug));
+    
+    revalidatePath('/admin');
+    revalidatePath('/shop');
+    revalidatePath('/');
+    
+    return { success: true, category: { name, slug } };
+  } catch (e: any) { 
+    return { success: false, error: e.message }; 
+  }
 }
