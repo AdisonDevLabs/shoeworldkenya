@@ -24,16 +24,15 @@ export async function createProduct(formData: FormData) {
 
     // 2. Process Gallery Images (Multiple files)
     const galleryFiles = formData.getAll('galleryImages') as File[];
-    const galleryUrls: string[] = [];
-    
-    // Loop through and upload any valid gallery files
-    for (const file of galleryFiles) {
-      if (file && file.size > 0) {
-        const key = `products/${Date.now()}-gallery-${file.name.replace(/\s+/g, '-')}`;
-        await env.PRODUCT_IMAGES.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
-        galleryUrls.push(`${R2_PUBLIC_URL}/${key}`);
-      }
-    }
+    const validGalleryFiles = galleryFiles.filter(file => file && file.size > 0);
+
+    const uploadPromises = validGalleryFiles.map(async (file) => {
+      const key = `products/${Date.now()}-gallery-${file.name.replace(/\s+/g, '-')}`;
+      await env.PRODUCT_IMAGES.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
+      return `${R2_PUBLIC_URL}/${key}`;
+    });
+
+    const galleryUrls = await Promise.all(uploadPromises);
 
     // 3. Construct the array: Main Image is ALWAYS index 0
     const finalImagesArray = [mainImageUrl, ...galleryUrls];
@@ -104,17 +103,19 @@ export async function updateProduct(id: string, formData: FormData) {
     const validGalleryFiles = galleryFiles.filter(file => file && file.size > 0);
     
     if (validGalleryFiles.length > 0) {
-      const galleryUrls: string[] = [];
-      for (const file of validGalleryFiles) {
+      // Create an array of upload tasks
+      const uploadPromises = validGalleryFiles.map(async (file) => {
         const key = `products/${Date.now()}-gallery-${file.name.replace(/\s+/g, '-')}`;
         await env.PRODUCT_IMAGES.put(key, await file.arrayBuffer(), { httpMetadata: { contentType: file.type } });
-        galleryUrls.push(`${R2_PUBLIC_URL}/${key}`);
-      }
+        return `${R2_PUBLIC_URL}/${key}`;
+      });
+
+      // Execute all uploads at the exact same time
+      const galleryUrls = await Promise.all(uploadPromises);
       
-      // If new gallery images are uploaded, overwrite the old gallery
-      // Rule: Main Image is ALWAYS index 0
+      // Overwrite the old gallery. Main Image is ALWAYS index 0
       finalImagesArray = [finalMainImageUrl, ...galleryUrls];
-    }
+    }git
 
     const updatedData = {
       name: formData.get('name') as string,
