@@ -138,21 +138,40 @@ export async function createCategory(formData: FormData) {
     const { env } = await getCloudflareContext({ async: true });
     const db = await getDb();
     
-    const imageFile = formData.get('image') as File;
     const name = formData.get('name') as string;
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const label = formData.get('label') as string;
+    const span = formData.get('span') as string || 'md:col-span-2';
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     
-    let imageUrl = '/placeholder.jpg';
-    if (imageFile && imageFile.size > 0) {
-      const key = `categories/${slug}-${Date.now()}`;
-      await env.PRODUCT_IMAGES.put(key, await imageFile.arrayBuffer(), { httpMetadata: { contentType: imageFile.type } });
-      imageUrl = `https://pub-22a2ca70d18d4e32a7cf45d56477c7f9.r2.dev/${key}`;
+    const imageFile = formData.get('image') as File;
+    if (!imageFile || imageFile.size === 0) {
+        throw new Error('Category image is required');
     }
 
-    await db.insert(categories).values({ slug, name, image: imageUrl, label: 'New Collection' });
+    // Upload to R2
+    const key = `categories/${slug}-${Date.now()}`;
+    await env.PRODUCT_IMAGES.put(key, await imageFile.arrayBuffer(), { 
+        httpMetadata: { contentType: imageFile.type } 
+    });
+    const imageUrl = `https://pub-22a2ca70d18d4e32a7cf45d56477c7f9.r2.dev/${key}`;
+
+    // Insert FULL row into categories table
+    await db.insert(categories).values({ 
+        slug, 
+        name, 
+        label, 
+        span, 
+        image: imageUrl 
+    });
+    
     revalidatePath('/admin');
-    return { success: true };
-  } catch (e: any) { return { success: false, error: e.message }; }
+    revalidatePath('/shop');
+    revalidatePath('/');
+    
+    return { success: true, category: { name, slug } };
+  } catch (e: any) { 
+    return { success: false, error: e.message }; 
+  }
 }
 
 export async function deleteCategory(slug: string) {
